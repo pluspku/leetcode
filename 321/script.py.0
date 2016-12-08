@@ -1,0 +1,56 @@
+class Solution(object):
+    def maxNumber(self, nums1, nums2, k):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :type k: int
+        :rtype: List[int]
+        """
+        inf = float('inf')
+        nums1 = [inf] + nums1
+        nums2 = [inf] + nums2
+        idx1 = sorted(range(len(nums1)), key = lambda i: nums1[i], reverse = True)
+        idx2 = sorted(range(len(nums2)), key = lambda i: nums2[i], reverse = True)
+        N1 = len(nums1)
+        N2 = len(nums2)
+        ret = []
+        i1 = 0
+        i2 = 0
+        print idx1
+        print idx2
+        for t in xrange(k):
+            print t
+            p1 = i1 + 1
+            while p1 < N1 and (idx1[p1] < idx1[i1] or t + N1 - idx1[p1] + N2 - idx2[i2] - 1< k):
+                print 'inc p1', t, N1, idx1[p1], N2, idx2[i2]
+                p1 += 1
+            p2 = i2 + 1
+            while p2 < N2 and (idx2[p2] < idx2[i2] or t + N2 - idx2[p2] + N1 - idx1[i1] - 1< k):
+                print 'inc p2', t, N1, idx1[p1], N2, idx2[i2]
+                p2 += 1
+            if p1 == N1:
+                choose = 2
+            elif p2 == N2:
+                choose = 1
+            elif nums1[idx1[p1]] > nums2[idx2[p2]]:
+                choose = 1
+            else:
+                choose = 2
+#            print idx1[p1],'>',idx1[i1],',',idx2[p2], '>', idx2[i2], choose
+            
+            assert p1 != N1 or p2 != N1, "%d %d %d %d" % (p1, i1, p2, i2)
+
+            print 'status == ', p1, i1, p2, i2
+            if choose == 1:
+                ret.append(nums1[idx1[p1]])
+                i1 = p1
+            else:
+                ret.append(nums2[idx2[p2]])
+                i2 = p2
+            print 'choose = %d' % choose, ret[-1]
+        return ret
+
+
+fn = Solution().maxNumber
+#print fn([3,4,6,5], [9,1,2,5,8,3], 5)
+print fn([5,7], [6,0,4], 5)
